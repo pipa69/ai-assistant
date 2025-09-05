@@ -1,5 +1,3 @@
-Build Android APK
-
 on:
   push:
     branches:
