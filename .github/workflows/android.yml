@@ -1,8 +1,8 @@
-name: Android CI
+name: AI Assistant Android CI
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "pipa69-patch-1-1" ]
   pull_request:
     branches: [ "main" ]
 
