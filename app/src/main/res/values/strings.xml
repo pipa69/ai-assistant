@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">AI Assistant</string>
+    <string name="chat_hint">Type your message...</string>
+    <string name="send_button">Send</string>
+    <string name="voice_button">Voice input</string>
+</resources>
