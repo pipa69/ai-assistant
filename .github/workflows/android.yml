@@ -74,19 +74,34 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
       
-    # Budowanie debug APK
+    # Budowanie debug APK z wszystkimi modułami Clean Architecture
     - name: Build debug APK
       run: ./gradlew :app:assembleDebug --stacktrace
       env:
-        # Zwiększenie pamięci dla Gradle
-        GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"
+        # Zwiększenie pamięci dla Gradle (potrzebne dla Compose + Hilt + Room)
+        GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError"
+      
+    # Test kompilacji wszystkich wariantów
+    - name: Compile all build variants
+      run: ./gradlew assemble --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=1024m"
       
     # Upload APK jako artefakt
     - name: Upload debug APK
       uses: actions/upload-artifact@v4
       with:
-        name: debug-apk
+        name: ai-assistant-debug-apk
         path: app/build/outputs/apk/debug/*.apk
+        retention-days: 30
+        
+    # Upload AAB jeśli został zbudowany
+    - name: Upload debug AAB
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ai-assistant-debug-aab
+        path: app/build/outputs/bundle/debug/*.aab
         retention-days: 30
         
     # Upload build reports w przypadku błędu
@@ -95,7 +110,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build-reports
-        path: app/build/reports/
+        path: |
+          app/build/reports/
+          build/reports/
         retention-days: 7
 
   # Job dla release build (tylko na main branch)
