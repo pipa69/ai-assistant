@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AI Assistant"
+rootProject.name = "MyApp"
 include(":app")
